@@ -1,10 +1,10 @@
-# Atlantis Platform Administration for Organizations
+# 63Klabs Atlantis DevOps Platform Administration for Organizations
 
 Templates and Scripts to provision developer roles, configurations, scripts, and templates within your organization on AWS.
 
-Whether you are learning on your own, part of a small team, teaching a class, or providing platform engineering services at your small to medium-sized organization, the [Atlantis Templates and Scripts Platform](https://github.com/63klabs/atlantis) makes it easy to improve your developer experience.
+Whether you are learning on your own, part of a small team, teaching a class, or providing platform engineering services at your small to medium-sized organization, the [63Klabs Atlantis DevOps Templates and Scripts Platform](https://github.com/63klabs/atlantis) makes it easy to improve your developer experience.
 
-- **Basic:** Start with maintaining a [SAM Configuration repository](https://github.com/63klabs/atlantis-sam-config-scripts) to manage your developer and deployment infrastructure all backed by the templates, scripts, startercode and MCP server maintained by 63Klabs.
+- **Basic:** Start with maintaining a [SAM Configuration repository](https://github.com/63klabs/atlantis-sam-config-scripts) to manage your developer and deployment infrastructure all backed by the templates, scripts, starter code and MCP server maintained by 63Klabs.
 - **Hybrid:** Develop and host your own templates, scripts, and/or MCP server while also utilizing templates and scripts provided by 63Klabs.
 - **Fully Self-Host:** Take it all on and self-host all templates, scripts, starter code, and the MCP Server.
 
@@ -12,13 +12,13 @@ Whether you are learning on your own, part of a small team, teaching a class, or
 
 ## Deployment and Management
 
-The Atlantis Platform is built on top of Altlantis, from pipeline templates that deploy starter code and templates managed by the platform engineers to the Atlantis MCP Server built using Starter #02, once you understand the basics of using the SAM Configuration repository, you'll understand how everything works together.
+The 63Klabs Atlantis DevOps Platform is built on top of Atlantis, from pipeline templates that deploy starter code and templates managed by the platform engineers to the Atlantis MCP Server built using Starter #02, once you understand the basics of using the SAM Configuration repository, you'll understand how everything works together.
 
 However, there is still a chicken and egg problem.
 
 Begin by creating a repository and developer roles.
 
-## Create a SAM Configuration Script Repository for your Organization
+## Keep it Simple to Start
 
 Your organization may be one AWS Account, or it may be many Organizational Accounts. Even personal accounts may consist of one or more organizational accounts.
 
@@ -26,24 +26,30 @@ You can manage a single, central repository in a central account that deploys to
 
 The choice is yours.
 
-More than likely you'll want to start setting up the SAM Configuration Repository in a `sandbox` or `demo` account.
+More than likely you'll want to start by setting up the SAM Configuration Repository in a single `sandbox` or `demo` account to experiment.
 
-[Get Started Setting Up the SAM Config Repository for Your Organization](./sam-config-repo/README.md)
+## Account Set Up
 
-## Supporting Infrastructure
+Once the account is established, you'll want to set up account infrastructure:
 
-Once the configuration repository is established, you'll want to set up supporting infrastructure:
-
-1. API Gateway Log Policy
-2. Managed policies to attach to pipelines
-3. Cache-Data storage for application cache
-4. S3 buckets to receive logs from S3 access and CloudFront
-5. If hosting Static Content fronted by CloudFront, a CloudFront cache invalidation service
-6. Documentation for developers on accessing the SAM Config repository including `Prefix` and `Permissions Boundaries`, access to the [Atlantis tutorials](https://github.com/63klabs/atlantis-tutorials) and [Atlantis MCP server](https://mcp.atlantis.63klabs.net).
+1. [SAM Config Repository for the AWS Account](./sam-config-repo/README.md)
+2. [Account Roles and Policies](./account-set-up/README.md)
+   - API Gateway Log Policy
+   - Managed policies to attach to pipelines
+3. [Application Support Infrastructure](./application-support-infrastructure/README.md)
+   - Cache-Data storage for application cache
+   - S3 buckets to receive logs from S3 access and CloudFront
+   - If hosting Static Content fronted by CloudFront, a CloudFront cache invalidation service
+4. Direct developers towards:
+   - SAM Config repository docs including script and common parameter usage
+   - [Atlantis tutorials](https://github.com/63klabs/atlantis-tutorials)
+   - [Atlantis MCP server](https://mcp.atlantis.63klabs.net)
 
 ## Self-Hosted Platform
 
 You can self-host as much or as little as you want.
+
+The account set-up described above works with the 63klabs bucket right **Out-Of-The-Box**, but you can move to a self-hosted platform if you want.
 
 - Set up an S3 bucket accessible to your developers (read-only)
 - Use GitHub actions to package your own templates and application starters and save to the S3 bucket (GitHub workflow is already included in the template repository, you can use the CodeBuild only pipeline and modify the GitHub actions workflow to deploy via CodePipeline as well)

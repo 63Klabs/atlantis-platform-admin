@@ -1,0 +1,3 @@
+   - Cache-Data storage for application cache
+   - S3 buckets to receive logs from S3 access and CloudFront
+   - If hosting Static Content fronted by CloudFront, a CloudFront cache 
