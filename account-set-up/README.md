@@ -10,6 +10,8 @@ All templates and modules are sourced from S3. You do not need a local clone of 
 - Access to the S3 bucket containing Atlantis templates (`s3://63klabs/atlantis/templates/v2/`)
 - IAM permissions to create CloudFormation stacks, IAM roles, and IAM policies
 - For the project pipeline stack: permissions to create CodeConnections and API Gateway Account resources (if using those features)
+- SAM Config repo already set up
+  - Prefix, Role Path, Service Role Path, Permissions Boundary information
 
 ## S3 Template and Module Locations
 

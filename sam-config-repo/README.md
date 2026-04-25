@@ -1,10 +1,41 @@
 # Set Up SAM Configuration Repository and Developer Roles
 
-## 1. Set Up Configuration Repository
+## 1. Create Configuration Repository
 
 The repository can reside in the repository provider of your choice (CodeCommit, GitHub, GitLab, etc).
 
 Initialize a new repository and give it a name to promote it as the central repository for your organization's (or team or org unit's) SAM Configuration files, such as: `sam-config` (It may be helpful to append an account identifer if you will be maintaining/using several SAM Config repos even if across accounts).
+
+```bash
+aws codecommit create-repository \
+  --repository-name sam-config \
+  --repository-description "Central SAM Configuration repository for deployment infrastructure using Atlantis" \
+  --tags file://tags.json \
+  --profile ADMIN_PROFILE
+```
+
+Note the use of `file://tags.json` which you can use throughout the provisioning process. Tags are an important feature of AWS cloud management and therefore core to the Atlantis DevOps Platform as they provide access using IAM policies, cost and project organization, and cloud management.
+
+Throughout the account set-up process you will see `file://` which is important in documenting the configuration of your resources. Use this to your advantage as it self-documents and allows you to develop automated deployments in the future.
+
+`tags.json` structure:
+```json
+{
+  "Environment": "dev",
+  "Project": "my-project",
+  "Owner": "team-name",
+  "CostCenter": "12345"
+}
+```
+
+## 2. Initialize Configuration Repository
+
+Clone repository to your local machine:
+
+```bash
+git clone HTTPS_URL
+cd YOUR_REPO
+```
 
 Then, download and extract the Atlantis Platform CloudFormation Configuration Repository For Serverless Deployments into your new repository.
 
@@ -19,11 +50,11 @@ This repository will host the cli and deployment configurations for storage, net
 
 > It is important to **pull** any changes to the local machine, **config** and **deploy** an infrastructure stack using the cli, and then **commit** and **push** the configuration changes back to the remote repository for proper version control.
 
-## 2. Local Machine Set-Up
+## 3. Local Machine Set-Up
 
-In order to run the scripts you will need to set-up as instructed in [Set-Up Local Environment](https://github.com/63Klabs/atlantis-sam-config-scripts/blob/main/docs/00-Set-Up-Local-Environment.md).
+In order to run the scripts you will need to [Set-Up Local Environment](https://github.com/63Klabs/atlantis-sam-config-scripts/blob/main/docs/00-Set-Up-Local-Environment.md).
 
-## 3. Determine Default Settings and Naming Conventions
+## 4. Determine Default Settings and Naming Conventions
 
 The Principle of Least Privilege is maintained through resource naming and tagging.
 
@@ -53,6 +84,8 @@ These can be used for specifying resources under `Resources` and conditionals us
 Choose a Prefix that best describes the team, account, department, or function using that Prefix. You may also decide to separate out job function. For example, the finance development team may have their own AWS organization account. All developers on that team can use the `finc` Prefix. However, there may also be senior developers, or systems operators that develop solutions under the `finops` Prefix. Junior developers will be able to use `finc` but not have access to `finops` infrastructure. Senior developers may have access to both `finc` and `finops` and systems operators only have access to `finops`.
 
 Make sure the number of Prefixes you implement remain manageable.
+
+Also, keep prefixes short. Too long of a prefix will reduce the descriptiveness available for `ProjectId` and `StageId` when it comes to projects requiring S3 buckets as they have a 63 character limit (half of which is taken up by account regional naming leaving only around 33 characters for `prefix-projectid-stageid-resource`).
 
 ### Role Path
 
@@ -90,7 +123,7 @@ Note that you can allow console and CLI access to developers based upon `/<SSM_P
 
 Including `S3BucketNameOrgPrefix` will require the `S3BucketNameOrgPrefix` parameter be supplied for ALL deployments.
 
-While it is good practice to include the region and account in the bucket name to keep them globally unique, you can pre-pend an organizational prefix (not to be confused with the Prefix namespace) to your buckets.
+While it is good practice to include the account and region name in the bucket name to keep them globally unique, you can pre-pend an organizational prefix (not to be confused with the Prefix namespace) to your buckets.
 
 For example, Acme Co may require `aco` be pre-pended.
 
@@ -98,13 +131,15 @@ Therefore, an application could have a bucket named `aco-acme-checkers-test-ACCT
 
 Note: Using the same application namespace prefix as a bucket name prefix could cause names like `acme-acme-*`. If this bothers you then choose your S3 bucket name prefix and application namespace prefix accordingly.
 
+> Account Regional Namespaces are used by default in all Atlantis templates. This ensures unique bucket names across accounts and regions, and keeps your buckets out of the global name space. This is an important security feature. As such `S3BucketNameOrgPrefix` are NOT necessary to prevent global conflicts, but they may still be used to help organize your buckets. However, bucket names have a 63 character limit, almost half are used up by the `-123456789012-my-region-2-an` leaving very little for descriptive `prefix-projectid-stage-resource` naming.
+
 ### Permissions Boundaries
 
 Permissions Boundaries can be used by administrators to limit what can and cannot be created by a user. If supplied, they must be included for ALL deployments.
 
 This is useful for allowing the necessary creation of Execution and Service roles for applications while limiting the types of permissions these roles may create. (Not allowing the ability to create new users, or delete/modify critical account policies for instance.)
 
-## 4. Configure defaults and settings
+## 5. Configure defaults and settings
 
 Update `defaults/defaults.json` and `defaults/settings.json`
 
@@ -237,62 +272,6 @@ These are default tags (not including default values) that are required by your 
 
 You can set up default values in `defaults.json` and each Prefix's `*-defaults.json` file.
 
-## 5. Create Pipeline Service Role
+## Complete
 
-Developers will need an ARN of the service role to use for deploying application stacks using the pipeline.
-
-Be sure to replace `acme` with your Prefix and `ADMIN_PROFILE` with a profile that has permissions to create service roles.
-
-```bash
-./cli/config.py service-role acme pipeline --profile ADMIN_PROFILE
-```
-
-After configuring the role, deploy using the `deploy.py` script (or choose Deploy Now at the end of the config.py script).
-
-```bash
-./cli/deploy.py service-role acme pipeline --profile ADMIN_PROFILE
-```
-
-Get the ARN of the service role from the output and add to the `*-defaults.json` file for the prefix.
-
-For example, for the prefix `acme`, update `defaults/acme-defaults.json` and set `atlantis.PipelineServiceRoleArn`.
-
-Be sure to commit your changes to the SAM config repository for others to use.
-
-You must allow users to Assume the Role before they can use it.
-
-## 6. Create Storage Service Role
-
-Developers will need an ARN of the service role to use for deploying storage stacks from the script CLI.
-
-Be sure to replace `acme` with your Prefix and `ADMIN_PROFILE` with a profile that has permissions to create service roles.
-
-```bash
-./cli/config.py service-role acme storage --profile ADMIN_PROFILE
-```
-
-After configuring the role, deploy using the `deploy.py` script (or choose Deploy Now at the end of the config.py script).
-
-```bash
-./cli/deploy.py service-role acme storage --profile ADMIN_PROFILE
-```
-
-Get the ARN of the service role from the output and add to the `*-defaults.json` file for the prefix.
-
-For example, for the prefix `acme`, update `defaults/acme-defaults.json` and set `atlantis.StorageServiceRoleArn`.
-
-Be sure to commit your changes to the SAM config repository for others to use.
-
-You must allow users to Assume the Role before they can use it.
-
-## 7. Create Network Service Role
-
-This role will create and manage CloudFront distributions and Route53 DNS records and may not be suitable for all developers. It may be reserved for network administrators.
-
-A template for this role has not yet been created, but you can create you own based upon the previously mentioned templates.
-
-## SAM Configuration and Developer Roles Set-Up Complete
-
-Do a run through of using the `create_repo.py`, `config.py`, and `deploy.py` scripts to ensure everything is working.
-
-For information on using these scripts refer to the [SAM Config Script Guide](https://github.com/63klabs/atlantis-sam-config-scripts/) or the [Atlantis Tutorials repository](http://github.com/63klabs/atlantis-tutorials).
+Commit your changes and move on to [Account Set-Up](../account-set-up/README.md)
