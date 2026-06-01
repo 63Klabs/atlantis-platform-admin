@@ -110,14 +110,20 @@ Example: `ACMECO-Atlantis-Account-Wide-Infra`
 
 ### Create Stack
 
+Templates are available from the 63klabs public bucket which is located in us-east-2. 
+
 ```bash
 aws cloudformation create-stack \
   --stack-name ACMECO-Atlantis-Account-Wide-Infra \
-  --template-url https://s3.amazonaws.com/63klabs/atlantis/templates/v2/account/account-wide-infrastructure.yml \
+  --template-url https://63klabs.s3.us-east-2.amazonaws.com/atlantis/templates/v2/account/account-wide-infrastructure.yml \
   --parameters file://account/params-account-wide-infrastructure.json \
   --tags file://tags-account.json \
-  --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
+  --role-arn arn:aws:iam::123456789012:role/ACME-ProvisionerRole \
+  --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
+  --profile YOUR_ADMIN_PROFILE
 ```
+
+> **Note:** While the 63klabs public bucket is in us-east-2, it brings in template modules from replicated buckets across `us-*` regions based on the region you are deploying to. If you are not deploying in a `us-*` region, you can either 1. Request 63klabs add a bucket for your region or 2. Create your own template bucket for the modules (treated as custom modules) and pass the `S3ModuleLocation` parameter. See [Atlantis SAM Templates](https://github.com/63klabs/atlantis-sam-templates) for more information on establishing your own template bucket. This is a limitation of AWS CloudFormation: Modules brought in through the template transform include MUST be in accessible from a bucket in the deployed region.
 
 ### Update Stack
 
