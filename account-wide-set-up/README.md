@@ -36,7 +36,7 @@ Create a file named `params-account-wide-infrastructure.json` and fill in each p
 ```json
 [
   { "ParameterKey": "OrgPrefix", "ParameterValue": "ACMECO" },
-  { "ParameterKey": "RolePath", "ParameterValue": "/sam-app/" },
+  { "ParameterKey": "RolePath", "ParameterValue": "/application-role/" },
   { "ParameterKey": "GitHubOrg", "ParameterValue": "" },
   { "ParameterKey": "EnableApiGwCloudWatchLogs", "ParameterValue": "true" },
   { "ParameterKey": "S3ModuleNamespace", "ParameterValue": "atlantis" }
@@ -54,8 +54,8 @@ Create a file named `params-prefix-based-infrastructure.json` and fill in each p
   { "ParameterKey": "Prefix", "ParameterValue": "acme" },
   { "ParameterKey": "PrefixUpper", "ParameterValue": "ACME" },
   { "ParameterKey": "S3BucketNameOrgPrefix", "ParameterValue": "" },
-  { "ParameterKey": "ServiceRolePath", "ParameterValue": "/sam-svc/" },
-  { "ParameterKey": "RolePath", "ParameterValue": "/sam-app/" },
+  { "ParameterKey": "ServiceRolePath", "ParameterValue": "/service-role/" },
+  { "ParameterKey": "RolePath", "ParameterValue": "/application-role/" },
   { "ParameterKey": "PermissionsBoundaryArn", "ParameterValue": "" },
   { "ParameterKey": "GroupNames", "ParameterValue": "" },
   { "ParameterKey": "RoleNames", "ParameterValue": "" },
