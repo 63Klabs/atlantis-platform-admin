@@ -39,11 +39,11 @@ Create a file named `params-account-wide-infrastructure.json` and fill in each p
   { "ParameterKey": "RolePath", "ParameterValue": "/sam-app/" },
   { "ParameterKey": "GitHubOrg", "ParameterValue": "" },
   { "ParameterKey": "EnableApiGwCloudWatchLogs", "ParameterValue": "true" },
-  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs/atlantis" }
+  { "ParameterKey": "S3ModuleNamespace", "ParameterValue": "atlantis" }
 ]
 ```
 
-> **NOTE:** `OrgPrefix` is used to distinguish account-wide resources created by the Platform team, typically UPPER case with some resemblance of an organization or account name. This will make them stand out in IAM Role/Policy and CloudFormation stack listings. They should NOT be the same as any `Prefix` you will be assigning. They CAN be the same as the `S3BucketNameOrgPrefix` (if using). An upper case `OrgPrefix` is STRONGLY encouraged.
+> **NOTE:** `OrgPrefix` is used to distinguish **account-wide** resources created by the Platform team **NOT TO BE CONFUSED WITH S3-ORG-PREFIX**! This is typically UPPER case with some resemblance of an organization or account name. This will make them stand out in IAM Role/Policy and CloudFormation stack listings. They should NOT be the same as any `Prefix` you will be assigning. They CAN be the same as the `S3BucketNameOrgPrefix` (if using). An upper case `OrgPrefix` is STRONGLY encouraged.
 
 To skip the GitHub connection, set `GitHubOrg` to `""`. To skip API Gateway logging, set `EnableApiGwCloudWatchLogs` to `"false"`. The module URLs are still required even when the features are disabled (CloudFormation fetches the snippets but the resources inside are conditionally created).
 
@@ -60,7 +60,7 @@ Create a file named `params-prefix-based-infrastructure.json` and fill in each p
   { "ParameterKey": "GroupNames", "ParameterValue": "" },
   { "ParameterKey": "RoleNames", "ParameterValue": "" },
   { "ParameterKey": "UserNames", "ParameterValue": "" },
-  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs/atlantis" }
+  { "ParameterKey": "S3ModuleNamespace", "ParameterValue": "atlantis" }
 ]
 ```
 
