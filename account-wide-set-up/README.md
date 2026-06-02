@@ -15,19 +15,20 @@ All templates and modules are sourced from S3. You do not need a local clone of 
 
 ## S3 Template and Module Locations
 
-All references below use the following `S3ModuleLocation`:
+All references below use the following `S3ModuleLocation` and `S3ModuleNamespace` respectively, as if deploying in `us-east-1`:
 
 ```
-63klabs/atlantis
+63klabs-atlas-us-east-1
+atlantis
 ```
 
-63Klabs provides public access the `63klabs` bucket with the `atlantis` namespace to allow organizations to get up and running.
+See notes below to use the `S3ModuleLocation` to match your deployment region.
 
 ## Using JSON Parameter and Tag Files
 
 Rather than passing parameters inline, store your configuration in JSON files within your management repository. This keeps CLI commands short, makes configuration reviewable in version control, and allows reuse across create and update operations.
 
-It is advisable you get your parameter and tag files together before moving on to the CLI commands.
+It is advisable that you get your parameter and tag files together before moving on to the CLI commands.
 
 ### Parameter File Format
 
