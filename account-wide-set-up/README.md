@@ -123,7 +123,7 @@ Example: `ACMECO-Atlantis-Account-Wide-Infra`
 
 ### Create Stack
 
-Templates are available from the 63klabs public bucket which is located in us-east-2. 
+Templates are available from the 63klabs public bucket in us-east-2. However, you must specify a bucket for the `S3ModulesLocation` parameter that matches the region you are deploying.
 
 ```bash
 aws cloudformation create-stack \
@@ -197,11 +197,11 @@ If you provided a `GitHubOrg`, the connection will be in a **PENDING** state. To
 
 ## Stack 2: Prefix-Based Infrastructure
 
-This stack creates prefix-based resources and scoped IAM service roles and managed policies for Pipeline, Storage, and Network management. Deploy one stack per prefix per account.
+This stack creates prefix-based resources and scoped IAM service roles and managed policies for Pipeline, Storage, and Network management. Deploy one stack per prefix, per account.
 
 This can be used as a more comprehensive method compared to configuring and deploying each service-role independently using `config.py/deploy.py service-role ${prefix} ${pipeline|storage|network}`
 
-> NOTE: If you use this method of deployment you DO NOT need to configure and deploy individual service roles for the prefix.
+> NOTE: If you use this deployment method, you DO NOT need to configure and deploy individual service roles for the prefix.
 
 ### Stack Name Convention
 
@@ -221,7 +221,7 @@ aws cloudformation create-stack \
   --template-url https://63klabs.s3.us-east-2.amazonaws.com/atlantis/templates/v2/account/prefix-based-infrastructure.yml \
   --parameters file://acme/params-prefix-based-infrastructure.json \
   --tags file://tags-account.json \
-  --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
+  --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
   --role-arn arn:aws:iam::123456789012:role/ACME-ProvisionerRole \
   --profile YOUR_ADMIN_PROFILE
 ```
@@ -234,7 +234,7 @@ aws cloudformation update-stack \
   --template-url https://63klabs.s3.us-east-2.amazonaws.com/atlantis/templates/v2/account/prefix-based-infrastructure.yml \
   --parameters file://acme/params-prefix-based-infrastructure.json \
   --tags file://tags-account.json \
-  --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
+  --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
   --role-arn arn:aws:iam::123456789012:role/ACME-ProvisionerRole \
   --profile YOUR_ADMIN_PROFILE
 ```
