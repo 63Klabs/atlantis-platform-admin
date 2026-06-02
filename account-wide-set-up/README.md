@@ -39,11 +39,22 @@ Create a file named `params-account-wide-infrastructure.json` and fill in each p
   { "ParameterKey": "RolePath", "ParameterValue": "/application-role/" },
   { "ParameterKey": "GitHubOrg", "ParameterValue": "" },
   { "ParameterKey": "EnableApiGwCloudWatchLogs", "ParameterValue": "true" },
+  { "ParameterKey": "EnableS3ArtifactsBucket", "ParameterValue": "true" },
+  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-atlas-us-east-1" },
   { "ParameterKey": "S3ModuleNamespace", "ParameterValue": "atlantis" }
 ]
 ```
 
 > **NOTE:** `OrgPrefix` is used to distinguish **account-wide** resources created by the Platform team **NOT TO BE CONFUSED WITH S3-ORG-PREFIX**! This is typically UPPER case with some resemblance of an organization or account name. This will make them stand out in IAM Role/Policy and CloudFormation stack listings. They should NOT be the same as any `Prefix` you will be assigning. They CAN be the same as the `S3BucketNameOrgPrefix` (if using). An upper case `OrgPrefix` is STRONGLY encouraged.
+
+> **NOTE:** `S3ModuleLocation` MUST be set to a bucket name in the SAME REGION you are deploying to. 63klabs provides buckets across four `us-*` regions. If you are not deploying in a `us-*` region, you must create your own template bucket for the templates and modules and pass your custom bucket as the `S3ModuleLocation` parameter. See [Atlantis SAM Templates](https://github.com/63klabs/atlantis-sam-templates) for more information on establishing your own template bucket. This is a limitation of AWS CloudFormation: Modules brought in through the template transform include MUST be in accessible from a bucket in the deployed region. Furthermore, mapping and complex functions are not available within Transform blocks. We tried to make it simple but hit the limits of CloudFormation.
+
+| Region | Bucket Name |
+|--------|-------------|
+| us-east-1 | 63klabs-atlas-us-east-1 |
+| us-east-2 | 63klabs-zenith-us-east-2 |
+| us-west-1 | 63klabs-fabric-us-west-1 |
+| us-west-2 | 63klabs-orbit-us-west-2 |
 
 To skip the GitHub connection, set `GitHubOrg` to `""`. To skip API Gateway logging, set `EnableApiGwCloudWatchLogs` to `"false"`. The module URLs are still required even when the features are disabled (CloudFormation fetches the snippets but the resources inside are conditionally created).
 
@@ -60,6 +71,7 @@ Create a file named `params-prefix-based-infrastructure.json` and fill in each p
   { "ParameterKey": "GroupNames", "ParameterValue": "" },
   { "ParameterKey": "RoleNames", "ParameterValue": "" },
   { "ParameterKey": "UserNames", "ParameterValue": "" },
+  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-atlas-us-east-1" },
   { "ParameterKey": "S3ModuleNamespace", "ParameterValue": "atlantis" }
 ]
 ```
@@ -122,8 +134,6 @@ aws cloudformation create-stack \
   --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
   --profile YOUR_ADMIN_PROFILE
 ```
-
-> **Note:** While the 63klabs public bucket is in us-east-2, it brings in template modules from replicated buckets across `us-*` regions based on the region you are deploying to. If you are not deploying in a `us-*` region, you can either 1. Request 63klabs add a bucket for your region or 2. Create your own template bucket for the modules (treated as custom modules) and pass the `S3ModuleLocation` parameter. See [Atlantis SAM Templates](https://github.com/63klabs/atlantis-sam-templates) for more information on establishing your own template bucket. This is a limitation of AWS CloudFormation: Modules brought in through the template transform include MUST be in accessible from a bucket in the deployed region.
 
 ### Update Stack
 
