@@ -36,6 +36,7 @@ Create a file named `params-account-wide-infrastructure.json` and fill in each p
 ```json
 [
   { "ParameterKey": "OrgPrefix", "ParameterValue": "ACMECO" },
+  { "ParameterKey": "S3BucketNameOrgPrefix", "ParameterValue": "" },
   { "ParameterKey": "RolePath", "ParameterValue": "/application-role/" },
   { "ParameterKey": "GitHubOrg", "ParameterValue": "" },
   { "ParameterKey": "EnableApiGwCloudWatchLogs", "ParameterValue": "true" },
@@ -130,8 +131,8 @@ aws cloudformation create-stack \
   --template-url https://63klabs.s3.us-east-2.amazonaws.com/atlantis/templates/v2/account/account-wide-infrastructure.yml \
   --parameters file://account/params-account-wide-infrastructure.json \
   --tags file://tags-account.json \
-  --role-arn arn:aws:iam::123456789012:role/ACME-ProvisionerRole \
   --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
+  --role-arn arn:aws:iam::123456789012:role/ACME-ProvisionerRole \
   --profile YOUR_ADMIN_PROFILE
 ```
 
@@ -140,10 +141,12 @@ aws cloudformation create-stack \
 ```bash
 aws cloudformation update-stack \
   --stack-name ACMECO-Atlantis-Account-Wide-Infra \
-  --template-url https://s3.amazonaws.com/63klabs/atlantis/templates/v2/account/account-wide-infrastructure.yml \
+  --template-url https://63klabs.s3.us-east-2.amazonaws.com/atlantis/templates/v2/account/account-wide-infrastructure.yml \
   --parameters file://account/params-account-wide-infrastructure.json \
   --tags file://tags-account.json \
-  --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
+  --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
+  --role-arn arn:aws:iam::123456789012:role/ACME-ProvisionerRole \
+  --profile YOUR_ADMIN_PROFILE
 ```
 
 To update only specific parameters while keeping others unchanged, use `UsePreviousValue`:
@@ -151,10 +154,13 @@ To update only specific parameters while keeping others unchanged, use `UsePrevi
 ```json
 [
   { "ParameterKey": "OrgPrefix", "UsePreviousValue": true },
-  { "ParameterKey": "RolePath", "ParameterValue": "/sam-app/" },
-  { "ParameterKey": "GitHubOrg", "UsePreviousValue": true },
+  { "ParameterKey": "S3BucketNameOrgPrefix", "UsePreviousValue": true },
+  { "ParameterKey": "RolePath", "UsePreviousValue": true },
+  { "ParameterKey": "GitHubOrg", "ParameterValue": "63klabs" },
   { "ParameterKey": "EnableApiGwCloudWatchLogs", "UsePreviousValue": true },
-  { "ParameterKey": "S3ModuleLocation", "UsePreviousValue": true }
+  { "ParameterKey": "EnableS3ArtifactsBucket", "UsePreviousValue": true },
+  { "ParameterKey": "S3ModuleLocation", "UsePreviousValue": true },
+  { "ParameterKey": "S3ModuleNamespace", "UsePreviousValue": true }
 ]
 ```
 
@@ -166,6 +172,7 @@ To update only specific parameters while keeping others unchanged, use `UsePrevi
 | Cognito CRUD Managed Policy | Always | ABAC-scoped policy for Cognito User Pool management |
 | GitHub Connection | GitHubOrg is not empty | CodeConnections connection to GitHub (requires manual completion) |
 | API Gateway CloudWatch Role | EnableApiGwCloudWatchLogs is true | IAM role + API Gateway Account config for CloudWatch logging |
+| S3 SAM Artifacts Bucket | EnableS3ArtifactsBucket is true | S3 bucket for `defaults.json` `atlantis.s3_bucket` and `parameter_overrides.S3ArtifactsBucket` |
 
 ### Post-Deployment: GitHub Connection
 
@@ -184,6 +191,7 @@ If you provided a `GitHubOrg`, the connection will be in a **PENDING** state. To
 | Cognito CRUD Policy ARN | `<ORG>-ProjectPipeline-CognitoCrud-Arn` | Always |
 | GitHub Connection ARN | `<ORG>-GitHub-Connection-Arn` | GitHubOrg provided |
 | API GW CloudWatch Role ARN | `<ORG>-ApiGateway-CloudWatch-Role-Arn` | Logging enabled |
+| S3 Artifacts Bucket Name | `<ORG_S3_PREFIX>-cf-artifacts-<ACCOUNT>-<REGION>-an` | Artifacts enabled |
 
 ---
 
@@ -210,10 +218,12 @@ Examples:
 ```bash
 aws cloudformation create-stack \
   --stack-name ACME-Atlantis-Prefix-Based-Infra \
-  --template-url https://s3.amazonaws.com/63klabs/atlantis/templates/v2/account/prefix-based-infrastructure.yml \
+  --template-url https://63klabs.s3.us-east-2.amazonaws.com/atlantis/templates/v2/account/prefix-based-infrastructure.yml \
   --parameters file://acme/params-prefix-based-infrastructure.json \
   --tags file://tags-account.json \
   --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
+  --role-arn arn:aws:iam::123456789012:role/ACME-ProvisionerRole \
+  --profile YOUR_ADMIN_PROFILE
 ```
 
 ### Update Stack
@@ -221,10 +231,12 @@ aws cloudformation create-stack \
 ```bash
 aws cloudformation update-stack \
   --stack-name ACME-Atlantis-Prefix-Based-Infra \
-  --template-url https://s3.amazonaws.com/63klabs/atlantis/templates/v2/account/prefix-based-infrastructure.yml \
+  --template-url https://63klabs.s3.us-east-2.amazonaws.com/atlantis/templates/v2/account/prefix-based-infrastructure.yml \
   --parameters file://acme/params-prefix-based-infrastructure.json \
   --tags file://tags-account.json \
   --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
+  --role-arn arn:aws:iam::123456789012:role/ACME-ProvisionerRole \
+  --profile YOUR_ADMIN_PROFILE
 ```
 
 To update only specific parameters while keeping others unchanged, use `UsePreviousValue`:
