@@ -281,6 +281,10 @@ To update only specific parameters while keeping others unchanged, use `UsePrevi
 | Network CloudFront Role ARN | `<PREFIX>-CloudFormation-Network-CloudFront-Mgmt-Service-Role-Arn` |
 | Network Full Role ARN | `<PREFIX>-CloudFormation-Network-Full-Mgmt-Service-Role-Arn` |
 
+## Update SAM Config Repository Defaults
+
+Using the parameters and outputs from the stacks you created, update the `defaults.json` with the appropriate artifact bucket names (`atlantis.s3_bucket` and `S3ArtifactsBucket`) and Role Arns.
+
 ---
 
 ## Monitoring Stack Operations
