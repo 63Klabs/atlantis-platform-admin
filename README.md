@@ -26,7 +26,7 @@ You can manage a single, central repository in a central account that deploys to
 
 The choice is yours.
 
-More than likely you'll want to start by setting up the SAM Configuration Repository in a single `sandbox` or `demo` account to experiment.
+More likely, you'll want to start by setting up the SAM Configuration Repository in a single `sandbox` or `demo` account to experiment.
 
 ## Account Set Up
 
@@ -36,6 +36,7 @@ Once the account is established, you'll want to set up account infrastructure:
 2. [Account-Wide Set-Up: Roles, Policies, and Resources](./account-wide-set-up/README.md)
    - Account-Wide Infrastructure
    - Prefix-Based Infrastructure
+   - Configure SAM Config Repository with stack values
 3. [Application Support Infrastructure](./application-support-infrastructure/README.md)
    - Cache-Data storage for application cache
    - S3 buckets to receive logs from S3 access and CloudFront
