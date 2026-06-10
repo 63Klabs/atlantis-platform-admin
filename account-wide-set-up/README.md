@@ -133,6 +133,7 @@ aws cloudformation create-stack \
   --parameters file://account/params-account-wide-infrastructure.json \
   --tags file://tags-account.json \
   --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
+  --enable-termination-protection \
   --role-arn arn:aws:iam::123456789012:role/ACME-ProvisionerRole \
   --profile YOUR_ADMIN_PROFILE
 ```
@@ -223,6 +224,7 @@ aws cloudformation create-stack \
   --parameters file://acme/params-prefix-based-infrastructure.json \
   --tags file://tags-account.json \
   --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
+  --enable-termination-protection \
   --role-arn arn:aws:iam::123456789012:role/ACME-ProvisionerRole \
   --profile YOUR_ADMIN_PROFILE
 ```
@@ -350,6 +352,17 @@ There may be multiple exported values per stack. Check each one.
 If no imports are returned, the stack can be safely deleted:
 
 ```bash
+aws cloudformation update-termination-protection \
+  --no-enable-termination-protection \
+  --stack-name ACME-Atlantis-Management-Roles
+
+aws cloudformation delete-stack \
+  --stack-name ACME-Atlantis-Management-Roles
+
+aws cloudformation update-termination-protection \
+  --no-enable-termination-protection \
+  --stack-name ACME-Atlantis-Prefix-Based-Infra
+
 aws cloudformation delete-stack \
   --stack-name ACME-Atlantis-Prefix-Based-Infra
 ```
