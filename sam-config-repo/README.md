@@ -41,7 +41,7 @@ Then, download and extract the Atlantis Platform CloudFormation Configuration Re
 
 ```bash
 # Downloads and extracts files for the repository
-curl -L -o repo.zip "https://github.com/63klabs/atlantis-sam-config-scripts/archive/refs/heads/main.zip" && unzip -o repo.zip && DIR=$(ls -d */ | head -1) && mv "${DIR}docs" . && mv "${DIR}cli" . && mv "${DIR}defaults" . && mv "${DIR}README.md" . && mv "${DIR}.gitignore" . 2>/dev/null && rm -rf repo.zip && rm -rf "$DIR"
+curl -L -o repo.zip "https://github.com/63klabs/atlantis-sam-config-scripts/archive/refs/heads/main.zip" && unzip -o repo.zip && DIR=$(ls -d */ | head -1) && mv "${DIR}docs" . && mv "${DIR}cli" . && mv "${DIR}defaults" . && mv "${DIR}README.md" . && [ -f "${DIR}AGENTS-FOR-END-USE.md" ] && mv "${DIR}AGENTS-FOR-END-USE.md" ./AGENTS.md; [ -f "${DIR}CHANGELOG.md" ] && mv "${DIR}CHANGELOG.md" ./cli/CHANGELOG.md; mv "${DIR}.gitignore" . 2>/dev/null; rm -rf repo.zip && rm -rf "$DIR"
 ```
 
 > Note: The above command pulls the latest commit from the 63Klabs repository. You can point it to a `zip` in the releases as well. However, in the end you will set up the location to retrieve updates in the settings (release, main, S3), so once you run the `update.py` script you will get the version/release you desire.
