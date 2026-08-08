@@ -18,11 +18,16 @@ All templates and modules are sourced from S3. You do not need a local clone of 
 All references below use the following `S3ModuleLocation` and `S3ModuleNamespace` respectively, as if deploying in `us-east-1`:
 
 ```
-63klabs-atlas-us-east-1
-atlantis
+S3ModuleLocation: 63klabs-atlas-us-east-1
+S3ModuleNamespace: atlantis
 ```
 
-See notes below to use the `S3ModuleLocation` to match your deployment region.
+See notes below to use the `S3ModuleLocation` to match your deployment region. For example, if you are deploying in `us-east-2` then you would set the following:
+
+```
+S3ModuleLocation: 63klabs-zenith-us-east-2
+S3ModuleNamespace: atlantis
+```
 
 ## Using JSON Parameter and Tag Files
 
@@ -42,6 +47,8 @@ Create a file named `params-account-wide-infrastructure.json` and fill in each p
   { "ParameterKey": "GitHubOrg", "ParameterValue": "" },
   { "ParameterKey": "EnableApiGwCloudWatchLogs", "ParameterValue": "true" },
   { "ParameterKey": "EnableS3ArtifactsBucket", "ParameterValue": "true" },
+  { "ParameterKey": "EnableS3AccessLogBucket", "ParameterValue": "true" },
+  { "ParameterKey": "LogExpirationInDays", "ParameterValue": "90"},
   { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-atlas-us-east-1" },
   { "ParameterKey": "S3ModuleNamespace", "ParameterValue": "atlantis" }
 ]
@@ -51,7 +58,7 @@ Create a file named `params-account-wide-infrastructure.json` and fill in each p
 
 > **NOTE:** `S3ModuleLocation` MUST be set to a bucket name in the SAME REGION you are deploying to. 63klabs provides buckets across four `us-*` regions. If you are not deploying in a `us-*` region, you must create your own template bucket for the templates and modules and pass your custom bucket as the `S3ModuleLocation` parameter. See [Atlantis SAM Templates](https://github.com/63klabs/atlantis-sam-templates) for more information on establishing your own template bucket. This is a limitation of AWS CloudFormation: Modules brought in through the template "transform include" MUST be accessible from a bucket in the deployed region. Furthermore, mapping and complex functions are not available within Transform blocks. We tried to make it simple but hit the limits of CloudFormation.
 
-| Region | Bucket Name |
+| Region | S3ModuleLocation Bucket Name |
 |--------|-------------|
 | us-east-1 | 63klabs-atlas-us-east-1 |
 | us-east-2 | 63klabs-zenith-us-east-2 |
@@ -73,6 +80,7 @@ Create a file named `params-prefix-based-infrastructure.json` and fill in each p
   { "ParameterKey": "GroupNames", "ParameterValue": "" },
   { "ParameterKey": "RoleNames", "ParameterValue": "" },
   { "ParameterKey": "UserNames", "ParameterValue": "" },
+  { "ParameterKey": "EnableCacheData", "ParameterValue": "true" },
   { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-atlas-us-east-1" },
   { "ParameterKey": "S3ModuleNamespace", "ParameterValue": "atlantis" }
 ]
