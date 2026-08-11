@@ -42,13 +42,12 @@ Create a file named `params-account-wide-infrastructure.json` and fill in each p
 ```json
 [
   { "ParameterKey": "OrgPrefix", "ParameterValue": "ACMECO" },
-  { "ParameterKey": "S3BucketNameOrgPrefix", "ParameterValue": "" },
+  { "ParameterKey": "S3BucketNameOrgPrefix", "ParameterValue": "aco" },
   { "ParameterKey": "RolePath", "ParameterValue": "/application-role/" },
   { "ParameterKey": "GitHubOrg", "ParameterValue": "" },
   { "ParameterKey": "EnableApiGwCloudWatchLogs", "ParameterValue": "true" },
   { "ParameterKey": "EnableS3ArtifactsBucket", "ParameterValue": "true" },
   { "ParameterKey": "EnableS3AccessLogBucket", "ParameterValue": "true" },
-  { "ParameterKey": "LogExpirationInDays", "ParameterValue": "90"},
   { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-atlas-us-east-1" },
   { "ParameterKey": "S3ModuleNamespace", "ParameterValue": "atlantis" }
 ]
@@ -71,9 +70,10 @@ Create a file named `params-prefix-based-infrastructure.json` and fill in each p
 
 ```json
 [
+  { "ParameterKey": "OrgPrefix", "ParameterValue": "ACMECO" },
   { "ParameterKey": "Prefix", "ParameterValue": "acme" },
   { "ParameterKey": "PrefixUpper", "ParameterValue": "ACME" },
-  { "ParameterKey": "S3BucketNameOrgPrefix", "ParameterValue": "" },
+  { "ParameterKey": "S3BucketNameOrgPrefix", "ParameterValue": "aco" },
   { "ParameterKey": "ServiceRolePath", "ParameterValue": "/service-role/" },
   { "ParameterKey": "RolePath", "ParameterValue": "/application-role/" },
   { "ParameterKey": "PermissionsBoundaryArn", "ParameterValue": "" },
