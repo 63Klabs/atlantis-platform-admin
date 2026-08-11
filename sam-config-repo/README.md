@@ -266,12 +266,37 @@ Out of the box `regions` includes all available regions for AWS (as of early 202
 
 You can add or remove any region required by your organization.
 
+> **NOTE:** When deploying to any region outside of the `us-*` a self-hosted template bucket must be set up. Since the templates use modules, CloudFormation requires the template source bucket to be in the same region as the deployment. It is recommended you experiment and become familiar with the Atlantis DevOps Platform using one of the provided `us-*` region template sources first before self-hosting.
+
+##### s3_module_location_mapping
+
+When templates use `AWS::Include` to bring in re-usable template modules, the `deploy.py` script will often copy the templates to temporary, local storage and deploy from there. However, there are some cases where the module is fetched from the template source bucket by the `cloudformation` command. The `cloudformation` command requires the source bucket be in the same region as the deployment.
+
+This is where the `S3ModuleLocation` parameter comes in and `s3_module_location_mapping` can provide mapping.
+
+The 63Klabs Atlantis DevOps Platform provides four `us-*` template source buckets, one for each region. If you are self-hosting, you may add the necessary mappings for your organization in `s3_module_location_mapping`.
+
+You may remove any region mapping your organization is not using.
+
+```json
+"s3_module_location_mapping": [
+	{ "region": "us-east-1", "bucket": "63klabs-atlas-us-east-1" },
+	{ "region": "us-east-2", "bucket": "63klabs-zenith-us-east-2" },
+	{ "region": "us-west-1", "bucket": "63klabs-fabric-us-west-1" },
+	{ "region": "us-west-2", "bucket": "63klabs-orbit-us-west-2" }
+]
+```
+
+> **NOTE:** When setting up self-hosted buckets across regions, they should be provisioned with cross-region object replication from a main source bucket. While 63Klabs provides publicly accessible source buckets, your organization should restrict access. Remember: It is recommended you experiment and become familiar with the Atlantis DevOps Platform using one of the provided `us-*` region template sources first before self-hosting.
+
 ##### tag_keys
 
 These are default tags (not including default values) that are required by your organization for EVERY deployment.
 
 You can set up default values in `defaults.json` and each Prefix's `*-defaults.json` file.
 
-## Complete
+## Settings Complete
 
-Commit your changes and move on to [Account Set-Up](../account-set-up/README.md)
+Before setting the values of `defaults.json` and any prefix-based `*-defaults.json` you will need to complete the Account-Wide Set-Up deployments.
+
+Commit your changes and move on to [Account-Wide Set-Up](../account-wide-set-up/README.md).

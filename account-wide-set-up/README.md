@@ -195,13 +195,14 @@ If you provided a `GitHubOrg`, the connection will be in a **PENDING** state. To
 
 ### Key Outputs
 
-| Output | Export Name Pattern | Condition |
-|--------|-------------------|-----------|
-| CodeBuild CRUD Policy ARN | `<ORG>-ProjectPipeline-CodeBuildCrud-Arn` | Always |
-| Cognito CRUD Policy ARN | `<ORG>-ProjectPipeline-CognitoCrud-Arn` | Always |
-| GitHub Connection ARN | `<ORG>-GitHub-Connection-Arn` | GitHubOrg provided |
-| API GW CloudWatch Role ARN | `<ORG>-ApiGateway-CloudWatch-Role-Arn` | Logging enabled |
-| S3 Artifacts Bucket Name | `<ORG_S3_PREFIX>-cf-artifacts-<ACCOUNT>-<REGION>-an` | Artifacts enabled |
+| Output | Export Name Pattern | Condition | Pattern |
+|--------|-------------------|-----------|-----------|
+| CodeBuild CRUD Policy ARN | `<ORG>-ProjectPipeline-CodeBuildCrud-Arn` | Always | arn:aws:iam::<ACCT_ID>:policy/<ROLE_PATH>/<ORG>-ManagedPolicyForPipeline-CodeBuildCrud |
+| Cognito CRUD Policy ARN | `<ORG>-ProjectPipeline-CognitoCrud-Arn` | Always | arn:aws:iam::<ACCT_ID>:policy/<ROLE_PATH>/<ORG>-ManagedPolicyForPipeline-CognitoCrud |
+| GitHub Connection ARN | `<ORG>-GitHub-Connection-Arn` | `GitHubOrg` provided | `<ORG>-<GITHUB_ORG>-github-connection` |
+| API GW CloudWatch Role ARN | `<ORG>-ApiGateway-CloudWatch-Role-Arn` | `EnableApiGwCloudWatchLogs` = `true` | - |
+| S3 Artifacts Bucket Name | `<ORG>-S3-Artifacts-Bucket-Name` | `EnableS3ArtifactsBucket` = `true` | `<ORG_S3_PREFIX>-cf-artifacts-<ACCOUNT>-<REGION>-an` |
+| S3 Access Log Bucket Name | `<ORG>-S3-AccessLog-Bucket-Name` |  `EnableS3AccessLogBucket` = `true` | `<ORG_S3_PREFIX>-access-logs-<ACCOUNT>-<REGION>-an` |
 
 ---
 
@@ -272,15 +273,11 @@ To update only specific parameters while keeping others unchanged, use `UsePrevi
 | Resource | Description |
 |----------|-------------|
 | Pipeline Management Service Role | CloudFormation service role for deploying pipeline stacks |
-| Pipeline Management Managed Policy | PassRole policy for the pipeline service role |
 | Storage Management Service Role | CloudFormation service role for deploying storage stacks |
-| Storage Management Managed Policy | PassRole policy for the storage service role |
-| Network CloudFront Management Policy | Managed policy for CloudFront, OAC, cache policies, API GW domains |
-| Network Route53 Management Policy | Managed policy for Route53 DNS record management |
 | Network CloudFront Management Role | Developer service role (CloudFront only, no Route53) |
-| Network CloudFront Management Managed Policy | PassRole policy for the CloudFront-only role |
 | Network Full Management Role | Full access service role (CloudFront + Route53) |
-| Network Full Management Managed Policy | PassRole policy for the full network role |
+| Cache-Data Storage DynamoDb and S3 | Cache storage for applications deployed using @63klabs/cache-data npm package |
+| Cache-Data Lambda Policy | Managed policy to attach to Lambda execution role utilizing @63klabs/cache-data npm package |
 
 ### Key Outputs
 
@@ -290,6 +287,11 @@ To update only specific parameters while keeping others unchanged, use `UsePrevi
 | Storage Service Role ARN | `<PREFIX>-CloudFormation-Storage-Mgmt-Service-Role-Arn` |
 | Network CloudFront Role ARN | `<PREFIX>-CloudFormation-Network-CloudFront-Mgmt-Service-Role-Arn` |
 | Network Full Role ARN | `<PREFIX>-CloudFormation-Network-Full-Mgmt-Service-Role-Arn` |
+| Cache Data Table Name | `<PREFIX>-CacheDataDynamoDbTable` |
+| Cache Data S3 Bucket Name | `<PREFIX>-CacheDataS3Bucket` |
+| Cache Data Managed Lambda Execution Role Policy ARN | `<PREFIX>-CacheDataManagedLambdaExecutionRolePolicy` |
+
+> **NOTE:** Cache Data resources are used as imports at the application template level, they are not necessary to include in the `defaults.json` files.
 
 ## Update SAM Config Repository Defaults
 
