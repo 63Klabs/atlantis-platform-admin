@@ -143,7 +143,7 @@ This is useful for allowing the necessary creation of Execution and Service role
 
 Update `defaults/defaults.json` and `defaults/settings.json`
 
-#### defaults.json
+### defaults.json
 
 If SAM has been used on your account before, AWS SAM will have created an S3 bucket with the name `cf-*`. You may use that as both the `atlantis.s3_bucket` and `parameter_overrides.S3ArtifactsBucket` values in `defaults.json`.
 
@@ -155,11 +155,11 @@ Finally, though the rest of the values are recommended, update to suit your need
 
 You may also create `*-defaults.json` for each Prefix. After creating the Pipeline service role you will include the servie role's ARN in the appropriate defaults file.
 
-#### settings.json
+### settings.json
 
 Out of the box, settings.json can remain the way it is with the default values. 
 
-##### templates
+#### templates
 
 ```json
 {
@@ -183,7 +183,7 @@ Because the 63klabs bucket is public, `anonymous` is set to `true`. When using y
 
 Since `template` is an array, you can list more than one bucket.
 
-##### app_starters
+#### app_starters
 
 ```json
 {
@@ -205,7 +205,7 @@ The `app-starters` provided by the 63klabs bucket are zipped directly from relea
 
 Developers can also point the `--source` to any public repository or zip file when invoking the `create_repo.py` script.
 
-##### repositories
+#### repositories
 
 ```json
 {
@@ -223,7 +223,9 @@ The values are either `codecommit` or `github`.
 
 If provider is `codecommit` when running the `create_repo` script then a CodeCommit repository is created. If it is `github` then a GitHub repository is created.
 
-##### updates
+> **NOTE:** The `--provider` option may always be provided to override the default provider setting. For example `create_repo.py my-awesome-repo --provider github` when the default provider is `codecommit`.
+
+#### updates
 
 ```json
 {
@@ -252,7 +254,7 @@ For S3 as a source, `ver` can be:
 
 You can specify either `docs`, `cli` or both to update. It is recommended you perform regular updates to receive the latest fixes and features.
 
-##### regions
+#### regions
 
 ```json
 {
@@ -268,7 +270,7 @@ You can add or remove any region required by your organization.
 
 > **NOTE:** When deploying to any region outside of the `us-*` a self-hosted template bucket must be set up. Since the templates use modules, CloudFormation requires the template source bucket to be in the same region as the deployment. It is recommended you experiment and become familiar with the Atlantis DevOps Platform using one of the provided `us-*` region template sources first before self-hosting.
 
-##### s3_module_location_mapping
+#### s3_module_location_mapping
 
 When templates use `AWS::Include` to bring in re-usable template modules, the `deploy.py` script will often copy the templates to temporary, local storage and deploy from there. However, there are some cases where the module is fetched from the template source bucket by the `cloudformation` command. The `cloudformation` command requires the source bucket be in the same region as the deployment.
 
@@ -289,7 +291,7 @@ You may remove any region mapping your organization is not using.
 
 > **NOTE:** When setting up self-hosted buckets across regions, they should be provisioned with cross-region object replication from a main source bucket. While 63Klabs provides publicly accessible source buckets, your organization should restrict access. Remember: It is recommended you experiment and become familiar with the Atlantis DevOps Platform using one of the provided `us-*` region template sources first before self-hosting.
 
-##### tag_keys
+#### tag_keys
 
 These are default tags (not including default values) that are required by your organization for EVERY deployment.
 
