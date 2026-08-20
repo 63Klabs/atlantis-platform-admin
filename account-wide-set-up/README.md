@@ -45,6 +45,7 @@ Create a file named `params-account-wide-infrastructure.json` and fill in each p
   { "ParameterKey": "S3BucketNameOrgPrefix", "ParameterValue": "aco" },
   { "ParameterKey": "RolePath", "ParameterValue": "/application-role/" },
   { "ParameterKey": "GitHubOrg", "ParameterValue": "" },
+  { "ParameterKey": "AllowLegacyCloudFrontLogs", "ParameterValue": "true" },
   { "ParameterKey": "PromotionSourceAccountIds", "ParameterValue": "" },
   { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-atlas-us-east-1" }
 ]
@@ -55,6 +56,8 @@ Create a file named `params-account-wide-infrastructure.json` and fill in each p
 > **NOTE:** `OrgPrefix` is used to distinguish **account-wide** resources created by the Platform team **NOT TO BE CONFUSED WITH S3-ORG-PREFIX**! This is typically UPPER case with some resemblance of an organization or account name. This will make them stand out in IAM Role/Policy and CloudFormation stack listings. They should NOT be the same as any `Prefix` you will be assigning. They CAN be the same as the `S3BucketNameOrgPrefix` (if using). An upper case `OrgPrefix` is STRONGLY encouraged.
 
 > **NOTE:** `S3ModuleLocation` MUST be set to a bucket name in the SAME REGION you are deploying to. 63klabs provides buckets across four `us-*` regions. If you are not deploying in a `us-*` region, you must create your own template bucket for the templates and modules and pass your custom bucket as the `S3ModuleLocation` parameter. See [Atlantis SAM Templates](https://github.com/63klabs/atlantis-sam-templates) for more information on establishing your own template bucket. This is a limitation of AWS CloudFormation: Modules brought in through the template "transform include" MUST be accessible from a bucket in the deployed region. Furthermore, mapping and complex functions are not available within Transform blocks. We tried to make it simple but hit the limits of CloudFormation.
+
+> **NOTE:** `AllowLegacyCloudFrontLogs` by default is set to `false`, however, in the current templates, to send logs from CloudFront to the S3 log bucket, this needs to be set to `true`. If you are not using the CloundFront network templates then you can use the default `false` value.
 
 | Region | S3ModuleLocation Bucket Name |
 |--------|-------------|
