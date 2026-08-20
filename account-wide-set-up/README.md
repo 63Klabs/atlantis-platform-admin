@@ -45,13 +45,12 @@ Create a file named `params-account-wide-infrastructure.json` and fill in each p
   { "ParameterKey": "S3BucketNameOrgPrefix", "ParameterValue": "aco" },
   { "ParameterKey": "RolePath", "ParameterValue": "/application-role/" },
   { "ParameterKey": "GitHubOrg", "ParameterValue": "" },
-  { "ParameterKey": "EnableApiGwCloudWatchLogs", "ParameterValue": "true" },
-  { "ParameterKey": "EnableS3ArtifactsBucket", "ParameterValue": "true" },
-  { "ParameterKey": "EnableS3AccessLogBucket", "ParameterValue": "true" },
-  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-atlas-us-east-1" },
-  { "ParameterKey": "S3ModuleNamespace", "ParameterValue": "atlantis" }
+  { "ParameterKey": "PromotionSourceAccountIds", "ParameterValue": "" },
+  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-atlas-us-east-1" }
 ]
 ```
+
+> **NOTE:** The example above only covers the recommended parameters, leaving features such as enabling API Gateway Cloud Watch Logs, Artifacts Bucket, S3 and CloudFront Access Logs enabled. It is recommended you only turn these features off in limited scenarios as many templates and best practices rely on these features to be enabled. A full list of parameters are available in the [account-wide template documentation](https://github.com/63Klabs/atlantis-sam-templates/blob/main/docs/templates/v2/account/account-wide-infrastructure-README.md).
 
 > **NOTE:** `OrgPrefix` is used to distinguish **account-wide** resources created by the Platform team **NOT TO BE CONFUSED WITH S3-ORG-PREFIX**! This is typically UPPER case with some resemblance of an organization or account name. This will make them stand out in IAM Role/Policy and CloudFormation stack listings. They should NOT be the same as any `Prefix` you will be assigning. They CAN be the same as the `S3BucketNameOrgPrefix` (if using). An upper case `OrgPrefix` is STRONGLY encouraged.
 
@@ -64,7 +63,7 @@ Create a file named `params-account-wide-infrastructure.json` and fill in each p
 | us-west-1 | 63klabs-fabric-us-west-1 |
 | us-west-2 | 63klabs-orbit-us-west-2 |
 
-To skip the GitHub connection, set `GitHubOrg` to `""`. To skip API Gateway logging, set `EnableApiGwCloudWatchLogs` to `"false"`. The module URLs are still required even when the features are disabled (CloudFormation fetches the snippets but the resources inside are conditionally created).
+To skip the GitHub connection, set `GitHubOrg` to `""`.
 
 Create a file named `params-prefix-based-infrastructure.json` and fill in each parameter with your own `ParameterValue`:
 
@@ -77,14 +76,12 @@ Create a file named `params-prefix-based-infrastructure.json` and fill in each p
   { "ParameterKey": "ServiceRolePath", "ParameterValue": "/service-role/" },
   { "ParameterKey": "RolePath", "ParameterValue": "/application-role/" },
   { "ParameterKey": "PermissionsBoundaryArn", "ParameterValue": "" },
-  { "ParameterKey": "GroupNames", "ParameterValue": "" },
-  { "ParameterKey": "RoleNames", "ParameterValue": "" },
-  { "ParameterKey": "UserNames", "ParameterValue": "" },
   { "ParameterKey": "EnableCacheData", "ParameterValue": "true" },
-  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-atlas-us-east-1" },
-  { "ParameterKey": "S3ModuleNamespace", "ParameterValue": "atlantis" }
+  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-atlas-us-east-1" }
 ]
 ```
+
+> **NOTE:** The example above only covers the recommended parameters including `EnableCacheData` set to `true`. It is recommended you only turn these features off in limited scenarios as many templates and best practices rely on these features to be enabled. A full list of parameters are available in the [prefix-based template documentation](https://github.com/63Klabs/atlantis-sam-templates/blob/main/docs/templates/v2/account/prefix-based-infrastructure-README.md).
 
 ### Tag File Format
 
