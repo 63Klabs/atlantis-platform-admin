@@ -42,13 +42,13 @@ Create a file named `params-account-wide-infrastructure.json` and fill in each p
 ```json
 [
   { "ParameterKey": "OrgPrefix", "ParameterValue": "ACMECO" },
-  { "ParameterKey": "S3BucketNameOrgPrefix", "ParameterValue": "aco" },
+  { "ParameterKey": "S3BucketNameOrgPrefix", "ParameterValue": "" },
   { "ParameterKey": "RolePath", "ParameterValue": "/application-role/" },
   { "ParameterKey": "GitHubOrg", "ParameterValue": "" },
   { "ParameterKey": "AllowLegacyCloudFrontLogs", "ParameterValue": "true" },
   { "ParameterKey": "PromotionSourceAccountIds", "ParameterValue": "" },
   { "ParameterKey": "EnableBedrockInvocationLogs", "ParameterValue": "false" },
-  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-atlas-us-east-1" }
+  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-zenith-us-east-2" }
 ]
 ```
 A full list of parameters and descriptions are available in the [account-wide template documentation](https://github.com/63Klabs/atlantis-sam-templates/blob/main/docs/templates/v2/account/account-wide-infrastructure-README.md).
@@ -79,12 +79,12 @@ Create a file named `params-prefix-based-infrastructure.json` and fill in each p
   { "ParameterKey": "OrgPrefix", "ParameterValue": "ACMECO" },
   { "ParameterKey": "Prefix", "ParameterValue": "acme" },
   { "ParameterKey": "PrefixUpper", "ParameterValue": "ACME" },
-  { "ParameterKey": "S3BucketNameOrgPrefix", "ParameterValue": "aco" },
+  { "ParameterKey": "S3BucketNameOrgPrefix", "ParameterValue": "" },
   { "ParameterKey": "ServiceRolePath", "ParameterValue": "/service-role/" },
   { "ParameterKey": "RolePath", "ParameterValue": "/application-role/" },
   { "ParameterKey": "PermissionsBoundaryArn", "ParameterValue": "" },
   { "ParameterKey": "EnableCacheData", "ParameterValue": "true" },
-  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-atlas-us-east-1" }
+  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-zenith-us-east-2" }
 ]
 ```
 
