@@ -61,7 +61,7 @@ A full list of parameters and descriptions are available in the [account-wide te
 
 > **NOTE:** `AllowLegacyCloudFrontLogs` by default is set to `false`, however, in the current templates, to send logs from CloudFront to the S3 log bucket, this needs to be set to `true`. If you are not using the CloundFront network templates then you can use the default `false` value.
 
-> **NOTE:** `EnableBedrockInvocationLogs` by default is set to `false` but are not enabled until an additional command is submitted via the AWS CLI. Learn more about [enabling Bedrock Model Invocation Logging account-wide](./bedrock-model-invocation-logging.md).
+> **NOTE:** `EnableBedrockInvocationLogs` by default is set to `false` due to the sensitive nature of the content. It should only be enabled (set to `true`) in certain contexts (mainly non-production accounts or accounts that don't receive user submitted prompts).  After setting to `true` it is still not enabled until an additional command is submitted via the AWS CLI. Learn more about [enabling Bedrock Model Invocation Logging account-wide](./bedrock-model-invocation-logging.md).
 
 | Region | S3ModuleLocation Bucket Name |
 |--------|-------------|
