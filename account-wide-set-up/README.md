@@ -72,26 +72,6 @@ A full list of parameters and descriptions are available in the [account-wide te
 
 To skip the GitHub connection, set `GitHubOrg` to `""`.
 
-Create a file named `params-prefix-based-infrastructure.json` and fill in each parameter with your own `ParameterValue`:
-
-```json
-[
-  { "ParameterKey": "OrgPrefix", "ParameterValue": "ACMECO" },
-  { "ParameterKey": "Prefix", "ParameterValue": "acme" },
-  { "ParameterKey": "PrefixUpper", "ParameterValue": "ACME" },
-  { "ParameterKey": "S3BucketNameOrgPrefix", "ParameterValue": "" },
-  { "ParameterKey": "ServiceRolePath", "ParameterValue": "/service-role/" },
-  { "ParameterKey": "RolePath", "ParameterValue": "/application-role/" },
-  { "ParameterKey": "PermissionsBoundaryArn", "ParameterValue": "" },
-  { "ParameterKey": "EnableCacheData", "ParameterValue": "true" },
-  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-zenith-us-east-2" }
-]
-```
-
-A full list of parameters and descriptions are available in the [prefix-based template documentation](https://github.com/63Klabs/atlantis-sam-templates/blob/main/docs/templates/v2/account/prefix-based-infrastructure-README.md).
-
-> **NOTE:** The example above only covers the recommended parameters including `EnableCacheData` set to `true`. It is recommended you only turn these features off in limited scenarios as many templates and best practices rely on these features to be enabled. 
-
 ### Tag File Format
 
 Create a file named `tags-account.json` and provide your own tag `Key/Value` pairs:
@@ -136,6 +116,31 @@ This stack creates account-wide, ABAC-scoped managed policies and shared resourc
 
 Example: `ACMECO-Atlantis-Account-Wide-Infra`
 
+### Prefix-Based Stack Parameters
+
+Create a file named `<prefix>/params-prefix-based-infrastructure.json` and fill in each parameter with your own `ParameterValue`:
+
+```json
+[
+  { "ParameterKey": "OrgPrefix", "ParameterValue": "ACMECO" },
+  { "ParameterKey": "Prefix", "ParameterValue": "acme" },
+  { "ParameterKey": "PrefixUpper", "ParameterValue": "ACME" },
+  { "ParameterKey": "S3BucketNameOrgPrefix", "ParameterValue": "aco" },
+  { "ParameterKey": "ServiceRolePath", "ParameterValue": "/service-role/" },
+  { "ParameterKey": "RolePath", "ParameterValue": "/application-role/" },
+  { "ParameterKey": "PermissionsBoundaryArn", "ParameterValue": "" },
+  { "ParameterKey": "EnableCacheData", "ParameterValue": "true" },
+  { "ParameterKey": "EnableGitHubConnectionAccess", "ParameterValue": "false" },
+  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-atlas-us-east-1" }
+]
+```
+
+A full list of parameters and descriptions are available in the [prefix-based template documentation](https://github.com/63Klabs/atlantis-sam-templates/blob/main/docs/templates/v2/account/prefix-based-infrastructure-README.md).
+
+> **NOTE:** The example above only covers the recommended parameters including `EnableCacheData` set to `true`. It is recommended you only turn these features off in limited scenarios as many templates and best practices rely on these features to be enabled. 
+
+> **NOTE:** By default `EnableGitHubConnectionAccess` is set to `false`, if this prefix needs to be able to deploy from GitHub using `template-pipeline-github.yml` then `GitHubOrg` must be set in the `Account-Wide` stack AND `EnableGitHubConnectionAccess` must be set to `true` for any Prefix that is allowed to use the GitHub connector. Each prefix can be enabled independent of each other.
+
 ### Create Stack
 
 Templates are available from the 63klabs public bucket in us-east-2. However, you must specify a bucket for the `S3ModulesLocation` parameter that matches the region you are deploying.
@@ -154,6 +159,10 @@ aws cloudformation create-stack \
 
 ### Update Stack
 
+To make any updates to the Account-Wide-Infra stack in the future, you need to run the `update-stack` command with the same options as `create-stack` except the `--enable-termination-protection` option.
+
+Be sure to update the parameters and tag files with any updated values. You can leave the previous values the same for any that are unchanged.
+
 ```bash
 aws cloudformation update-stack \
   --stack-name ACMECO-Atlantis-Account-Wide-Infra \
@@ -163,21 +172,6 @@ aws cloudformation update-stack \
   --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
   --role-arn arn:aws:iam::123456789012:role/ACME-ProvisionerRole \
   --profile YOUR_ADMIN_PROFILE
-```
-
-To update only specific parameters while keeping others unchanged, use `UsePreviousValue`:
-
-```json
-[
-  { "ParameterKey": "OrgPrefix", "UsePreviousValue": true },
-  { "ParameterKey": "S3BucketNameOrgPrefix", "UsePreviousValue": true },
-  { "ParameterKey": "RolePath", "UsePreviousValue": true },
-  { "ParameterKey": "GitHubOrg", "ParameterValue": "63klabs" },
-  { "ParameterKey": "EnableApiGwCloudWatchLogs", "UsePreviousValue": true },
-  { "ParameterKey": "EnableS3ArtifactsBucket", "UsePreviousValue": true },
-  { "ParameterKey": "S3ModuleLocation", "UsePreviousValue": true },
-  { "ParameterKey": "S3ModuleNamespace", "UsePreviousValue": true }
-]
 ```
 
 ### What Gets Created
@@ -246,6 +240,10 @@ aws cloudformation create-stack \
 
 ### Update Stack
 
+To make any updates to the Prefix-Based-Infra stack in the future, you need to run the `update-stack` command with the same options as `create-stack` except the `--enable-termination-protection` option.
+
+Be sure to update the parameters and tag files with any updated values. You can leave the previous values the same for any that are unchanged.
+
 ```bash
 aws cloudformation update-stack \
   --stack-name ACME-Atlantis-Prefix-Based-Infra \
@@ -255,23 +253,6 @@ aws cloudformation update-stack \
   --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
   --role-arn arn:aws:iam::123456789012:role/ACME-ProvisionerRole \
   --profile YOUR_ADMIN_PROFILE
-```
-
-To update only specific parameters while keeping others unchanged, use `UsePreviousValue`:
-
-```json
-[
-  { "ParameterKey": "Prefix", "UsePreviousValue": true },
-  { "ParameterKey": "PrefixUpper", "UsePreviousValue": true },
-  { "ParameterKey": "S3BucketNameOrgPrefix", "UsePreviousValue": true },
-  { "ParameterKey": "ServiceRolePath", "UsePreviousValue": true },
-  { "ParameterKey": "RolePath", "UsePreviousValue": true },
-  { "ParameterKey": "PermissionsBoundaryArn", "ParameterValue": "arn:aws:iam::123456789012:policy/MyBoundary" },
-  { "ParameterKey": "GroupNames", "UsePreviousValue": true },
-  { "ParameterKey": "RoleNames", "UsePreviousValue": true },
-  { "ParameterKey": "UserNames", "UsePreviousValue": true },
-  { "ParameterKey": "S3ModuleLocation", "UsePreviousValue": true }
-]
 ```
 
 ### What Gets Created
@@ -383,4 +364,4 @@ aws cloudformation delete-stack \
   --stack-name ACME-Atlantis-Prefix-Based-Infra
 ```
 
-> **Note:** The GitHub connection resource has `DeletionPolicy: Retain` and will not be deleted when the project pipeline stack is deleted. You must manually delete it from the CodeConnections console if needed.
+> **Note:** The GitHub connection resource has `DeletionPolicy: Retain` and will not be deleted when the Account-Wide infrastructure is deleted. You must manually delete it from the CodeConnections console if needed.
