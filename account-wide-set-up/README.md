@@ -116,31 +116,6 @@ This stack creates account-wide, ABAC-scoped managed policies and shared resourc
 
 Example: `ACMECO-Atlantis-Account-Wide-Infra`
 
-### Prefix-Based Stack Parameters
-
-Create a file named `<prefix>/params-prefix-based-infrastructure.json` and fill in each parameter with your own `ParameterValue`:
-
-```json
-[
-  { "ParameterKey": "OrgPrefix", "ParameterValue": "ACMECO" },
-  { "ParameterKey": "Prefix", "ParameterValue": "acme" },
-  { "ParameterKey": "PrefixUpper", "ParameterValue": "ACME" },
-  { "ParameterKey": "S3BucketNameOrgPrefix", "ParameterValue": "aco" },
-  { "ParameterKey": "ServiceRolePath", "ParameterValue": "/service-role/" },
-  { "ParameterKey": "RolePath", "ParameterValue": "/application-role/" },
-  { "ParameterKey": "PermissionsBoundaryArn", "ParameterValue": "" },
-  { "ParameterKey": "EnableCacheData", "ParameterValue": "true" },
-  { "ParameterKey": "EnableGitHubConnectionAccess", "ParameterValue": "false" },
-  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-atlas-us-east-1" }
-]
-```
-
-A full list of parameters and descriptions are available in the [prefix-based template documentation](https://github.com/63Klabs/atlantis-sam-templates/blob/main/docs/templates/v2/account/prefix-based-infrastructure-README.md).
-
-> **NOTE:** The example above only covers the recommended parameters including `EnableCacheData` set to `true`. It is recommended you only turn these features off in limited scenarios as many templates and best practices rely on these features to be enabled. 
-
-> **NOTE:** By default `EnableGitHubConnectionAccess` is set to `false`, if this prefix needs to be able to deploy from GitHub using `template-pipeline-github.yml` then `GitHubOrg` must be set in the `Account-Wide` stack AND `EnableGitHubConnectionAccess` must be set to `true` for any Prefix that is allowed to use the GitHub connector. Each prefix can be enabled independent of each other.
-
 ### Create Stack
 
 Templates are available from the 63klabs public bucket in us-east-2. However, you must specify a bucket for the `S3ModulesLocation` parameter that matches the region you are deploying.
@@ -223,6 +198,32 @@ This can be used as a more comprehensive method compared to configuring and depl
 Examples:
 - `ACME-Atlantis-Prefix-Based-Infra`
 - `XLAB-Atlantis-Prefix-Based-Infra`
+
+
+### Prefix-Based Stack Parameters
+
+Create a file named `<prefix>/params-prefix-based-infrastructure.json` and fill in each parameter with your own `ParameterValue`:
+
+```json
+[
+  { "ParameterKey": "OrgPrefix", "ParameterValue": "ACMECO" },
+  { "ParameterKey": "Prefix", "ParameterValue": "acme" },
+  { "ParameterKey": "PrefixUpper", "ParameterValue": "ACME" },
+  { "ParameterKey": "S3BucketNameOrgPrefix", "ParameterValue": "aco" },
+  { "ParameterKey": "ServiceRolePath", "ParameterValue": "/service-role/" },
+  { "ParameterKey": "RolePath", "ParameterValue": "/application-role/" },
+  { "ParameterKey": "PermissionsBoundaryArn", "ParameterValue": "" },
+  { "ParameterKey": "EnableCacheData", "ParameterValue": "true" },
+  { "ParameterKey": "EnableGitHubConnectionAccess", "ParameterValue": "false" },
+  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-atlas-us-east-1" }
+]
+```
+
+A full list of parameters and descriptions are available in the [prefix-based template documentation](https://github.com/63Klabs/atlantis-sam-templates/blob/main/docs/templates/v2/account/prefix-based-infrastructure-README.md).
+
+> **NOTE:** The example above only covers the recommended parameters including `EnableCacheData` set to `true`. It is recommended you only turn these features off in limited scenarios as many templates and best practices rely on these features to be enabled. 
+
+> **NOTE:** By default `EnableGitHubConnectionAccess` is set to `false`, if this prefix needs to be able to deploy from GitHub using `template-pipeline-github.yml` then `GitHubOrg` must be set in the `Account-Wide` stack AND `EnableGitHubConnectionAccess` must be set to `true` for any Prefix that is allowed to use the GitHub connector. Each prefix can be enabled independent of each other.
 
 ### Create Stack
 
