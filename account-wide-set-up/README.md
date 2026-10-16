@@ -45,15 +45,19 @@ Create a file named `params-account-wide-infrastructure.json` and fill in each p
   { "ParameterKey": "S3BucketNameOrgPrefix", "ParameterValue": "" },
   { "ParameterKey": "RolePath", "ParameterValue": "/application-role/" },
   { "ParameterKey": "GitHubOrg", "ParameterValue": "" },
-  { "ParameterKey": "AllowLegacyCloudFrontLogs", "ParameterValue": "true" },
-  { "ParameterKey": "PromotionSourceAccountIds", "ParameterValue": "" },
+  { "ParameterKey": "AllowLegacyCloudFrontLogs", "ParameterValue": "false" },
+  { "ParameterKey": "EnableApiGwCloudWatchLogs", "ParameterValue": "true" },
+  { "ParameterKey": "EnableS3AccessLogBucket", "ParameterValue": "true" },
+  { "ParameterKey": "EnableS3ArtifactsBucket", "ParameterValue": "true" },
   { "ParameterKey": "EnableBedrockInvocationLogs", "ParameterValue": "false" },
-  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-zenith-us-east-2" }
+  { "ParameterKey": "PromotionSourceAccountIds", "ParameterValue": "" },
+  { "ParameterKey": "S3ModuleLocation", "ParameterValue": "63klabs-zenith-us-east-2" },
+  { "ParameterKey": "S3ModuleNamespace", "ParameterValue": "atlantis" }
 ]
 ```
 A full list of parameters and descriptions are available in the [account-wide template documentation](https://github.com/63Klabs/atlantis-sam-templates/blob/main/docs/templates/v2/account/account-wide-infrastructure-README.md).
 
-> **NOTE:** The example above only covers the recommended parameters, leaving features such as enabling API Gateway Cloud Watch Logs, Artifacts Bucket, S3 and CloudFront Access Logs enabled. It is recommended you only turn these features off in limited scenarios as many templates and best practices rely on these features to be enabled. 
+> **NOTE:** The example above only covers the recommended parameters and values. This leaves essential features such as enabling API Gateway Cloud Watch Logs, Artifacts Bucket, S3 and Access Logs enabled. It is recommended you only turn these features off in limited scenarios as many templates and best practices rely on these features to be enabled. Legacy CloudFront Logs and Bedrock Invocation Logs are intentionally set to `false` as their security risks should be understood and mitigated before enabiling.
 
 > **NOTE:** `OrgPrefix` is used to distinguish **account-wide** resources created by the Platform team **NOT TO BE CONFUSED WITH S3-ORG-PREFIX**! This is typically UPPER case with some resemblance of an organization or account name. This will make them stand out in IAM Role/Policy and CloudFormation stack listings. They should NOT be the same as any `Prefix` you will be assigning. They CAN be the same as the `S3BucketNameOrgPrefix` (if using). An upper case `OrgPrefix` is STRONGLY encouraged.
 
